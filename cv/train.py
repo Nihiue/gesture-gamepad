@@ -15,7 +15,7 @@ def read_label_data(label):
 
   return df
 
-labels = ['all', 'idle', 'index_and_middle', 'index', 'other', 'thumb']
+labels = ['all', 'idle', 'index_and_middle', 'index', 'thumb']
 
 df = pd.concat(map(read_label_data, labels))
 

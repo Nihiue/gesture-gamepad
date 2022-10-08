@@ -1,7 +1,7 @@
 import detector
 import os
 
-label = 'other'
+label = 'idle'
 
 filename = os.path.dirname(__file__) + '/data/' + label + '.csv'
 
