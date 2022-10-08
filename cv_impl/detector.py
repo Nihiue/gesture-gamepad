@@ -1,7 +1,5 @@
 import cv2
 import mediapipe as mp
-import time
-import numpy as np
 
 def hand_landmarks_to_vec(marks):
   vec = []
@@ -12,7 +10,7 @@ def hand_landmarks_to_vec(marks):
     vec.append(m.z)
   return vec
 
-def start(mode = 'Default', svm = None):
+def start(mode = 'Default', predict = None):
 
   mp_drawing = mp.solutions.drawing_utils
   mp_drawing_styles = mp.solutions.drawing_styles
@@ -52,7 +50,7 @@ def start(mode = 'Default', svm = None):
 
       image = cv2.flip(image, 1)
       # Flip the image horizontally for a selfie-view display.
-      key_press = cv2.waitKey(10) & 0b11111111
+      key_press = cv2.waitKey(20) & 0b11111111
 
       if (key_press == 27):
         break;
@@ -60,10 +58,8 @@ def start(mode = 'Default', svm = None):
       if results.multi_hand_landmarks:
         vec = hand_landmarks_to_vec(results.multi_hand_landmarks[0])
         if (mode == 'Predict'):
-          arr = np.array(vec)
-          y_pred = svm.predict(arr.reshape(-1,63))
-          image = cv2.putText(image, str(y_pred[0]), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 3, cv2.LINE_AA)
-          # time.sleep(0.1)
+          gesture = predict(vec)
+          image = cv2.putText(image, gesture, (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 2, cv2.LINE_AA)
 
         if mode == 'Capture' and key_press == ord('c'):
           print('Capture: ' + str(len(ret_data)))

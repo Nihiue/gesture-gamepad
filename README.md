@@ -13,12 +13,13 @@ Hardware
 Software
 
 * Python 3.9
-* opencv-python
-* mediapipe
-* pandas
-* sklearn
-* seaborn
-* numpy
+* lib: opencv-python
+* lib: mediapipe
+* lib: pandas
+* lib: sklearn
+* lib: seaborn
+* lib: numpy
+* lib: pyserial
 
 ### Virtual Keyboard
 
