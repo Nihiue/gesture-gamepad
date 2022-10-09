@@ -12,7 +12,7 @@ function landmarksToVec(landmarks) {
   return ret;
 }
 
-function dispatchKey(keyCode , delay = 100) {
+function dispatchKey(keyCode , delay = 50) {
   const keyDownEvt = new KeyboardEvent('keydown', {
     keyCode
   });
@@ -39,7 +39,7 @@ function virtulKeyboard(name) {
    case 87: game._board.cur.rotate('right'); break;
    */
    const now = Date.now();
-   if (lastCommandTime > now - 500) {
+   if (lastCommandTime > now - 800) {
      return;
    }
    lastCommandTime = now;
