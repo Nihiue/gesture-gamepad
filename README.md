@@ -5,6 +5,8 @@ Gaming Like a Ninjia!
 Use gesture to control games
 
 [Demo Video](https://www.bilibili.com/video/BV1rD4y1k7xK)
+
+
 [More Info](https://www.heywhale.com/mw/project/6342658cdfae024967917537)
 
 ![LOL](https://user-images.githubusercontent.com/5763301/194714864-a8454cd9-191a-4bc3-a025-32d6eac549e9.jpg)
@@ -20,13 +22,13 @@ Hardware
 Software
 
 * Python 3.9
-* lib: opencv-python
-* lib: mediapipe
-* lib: pandas
-* lib: sklearn
-* lib: seaborn
-* lib: numpy
-* lib: pyserial
+* Libs
+  * mediapipe
+  * pandas
+  * sklearn
+  * seaborn
+  * numpy
+  * pyserial
 
 ### Virtual Keyboard
 
