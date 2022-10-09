@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blockrain@0.2.0/dist/blockrain.css">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color:#efefef;
+      line-height: 1.8;
+    }
+    .output_canvas {
+      display: block;
+      max-width: 400px;
+      height: auto;
+      margin: auto;
+    }
+    .input_video {
+      display: none;
+    }
+    .game {
+      margin: 0 auto;
+    }
+    .container {
+      padding: 12px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .preview-container {
+      padding-top: 20vh;
+      width: 33%;
+      flex-grow: 0;
+    }
+    .help {
+      font-size: 18px;
+      padding-top: 20vh;
+      flex-grow: 0;
+      width: 33%;
+    }
+    td {
+      padding-right: 24px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/blockrain@0.2.0/dist/blockrain.jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="preview-container">
+      <video style="display: none" class="input_video"></video>
+      <canvas class="output_canvas" width="1280px" height="720px"></canvas>
+      <p style="text-align: center;" id="gesture-name"></p>
+    </div>
+    <div class="game" style="width:400px; height:800px;"></div>
+    <div class="help">
+      Put your LEFT hand in front of camera
+      <br>
+      <br>
+      <table>
+        <tr>
+          <td>Index & Middle</td>
+          <td>Start / Restart Game</td>
+        </tr>
+        <tr>
+          <td>Thumb</td>
+          <td>Move Left</td>
+        </tr>
+        <tr>
+          <td>Index</td>
+          <td>Move Right</td>
+        </tr>
+        <tr>
+          <td>All Fingers</td>
+          <td>Rotate</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+  <script src="./svm.js"></script>
+  <script>
+    $('.game').blockrain({
+      theme: 'gameboy',
+      speed: 8,
+      playText: 'Like a ninja',
+    });
+  </script>
+  <script src="./app.js" type="module"></script>
+</body>
+</html>
