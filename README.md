@@ -4,8 +4,9 @@ Gaming Like a Ninjia!
 
 Use gesture to control games
 
+[DEMO VIDEO](https://www.bilibili.com/video/BV1rD4y1k7xK)
+
 ![LOL](https://user-images.githubusercontent.com/5763301/194714864-a8454cd9-191a-4bc3-a025-32d6eac549e9.jpg)
-![WOW](https://user-images.githubusercontent.com/5763301/194714871-3db1984f-1957-4e70-a237-988df254851f.jpg)
 
 ## Requirements
 
