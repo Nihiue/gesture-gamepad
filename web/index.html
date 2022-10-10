@@ -4,18 +4,23 @@
   <meta charset="utf-8">
   <title>Gaming Like a Ninjia</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blockrain@0.2.0/dist/blockrain.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
       background: #000;
       color:#efefef;
       line-height: 1.8;
+      padding-bottom: 6px;
     }
 
     .output_canvas {
       display: block;
-      max-width: 400px;
       width: 100%;
       height: auto;
       margin: auto;
@@ -53,10 +58,22 @@
       flex-grow: 0;
       flex-shrink: 0;
       font-size: 18px;
+      padding: 0 12px;
     }
     
-    td {
-      padding-right: 24px;
+    table {
+      border-collapse: collapse;
+    }
+
+    td {    
+      padding: 4px 16px;
+      border: 1px solid #666;
+    }
+    
+    @media screen and (max-width:600px) {
+      .help, .preview-container, .game {
+        width: 100%;
+      }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
@@ -74,7 +91,7 @@
       <canvas class="output_canvas" width="1280px" height="720px"></canvas>
       <p style="text-align: center;" id="gesture-name"></p>
     </div>
-    <div class="game" style="width:400px; height:800px;"></div>
+    <div class="game" style="width:450px; height:800px;"></div>
     <div class="help">
       Put your LEFT hand in front of camera
       <br>

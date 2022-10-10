@@ -91,6 +91,15 @@ function onResults(results) {
 }
 
 function initApp() {
+  
+  const w = window.innerWidth;
+
+  if (w < 600) {
+    const gameEl = document.querySelector('.game');
+    gameEl.style.width = w + 'px';
+    gameEl.style.height = Math.ceil(w * 16 / 9) + 'px';
+  }
+  
   document.querySelector('.container').style.display = 'flex';
 
   $('.game').blockrain({
