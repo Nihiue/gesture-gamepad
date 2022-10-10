@@ -1,3 +1,5 @@
+const svmWorker = new Worker('./svm_worker.js');
+
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
@@ -26,7 +28,6 @@ function dispatchKey(keyCode , delay = 50) {
     document.dispatchEvent(keyUpEvt);
   }, delay);
 }
-
 
 let lastCommandTime = 0;
 let gameStart = 0;
@@ -80,35 +81,59 @@ function onResults(results) {
                      {color: '#00FF00', lineWidth: 5});
       drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
 
-      const gesture = gesture_predict(landmarksToVec(landmarks));
-      onGesture(gesture);
+      svmWorker.postMessage({
+        type: 'predict',
+        data: landmarksToVec(landmarks)
+      });
     }
   }
   canvasCtx.restore();
 }
 
-const hands = new Hands({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
-}});
+function initApp() {
+  document.querySelector('.container').style.display = 'flex';
 
-hands.setOptions({
-  maxNumHands: 1,
-  modelComplexity: 1,
-  minDetectionConfidence: 0.5,
-  minTrackingConfidence: 0.5
-});
+  $('.game').blockrain({
+    theme: 'gameboy',
+    speed: 8,
+    playText: 'Like a ninja',
+  });
 
-hands.onResults(onResults);
+  const hands = new Hands({locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+  }});
+  
+  hands.setOptions({
+    maxNumHands: 1,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
+  });
+  
+  hands.onResults(onResults);
+  
+  const camera = new Camera(videoElement, {
+    onFrame: async () => {
+      await hands.send({
+        image: videoElement
+      });
+    },
+    width: 1280,
+    height: 720
+  });
+  
+  camera.start();
+}
 
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    await hands.send({
-      image: videoElement
-    });
-  },
-  width: 1280,
-  height: 720
-});
 
-camera.start();
-
+svmWorker.onmessage = (e) => {
+  const data = e.data;
+  switch (data.type) {
+    case 'ready':
+      initApp();
+      break;
+    case 'result': 
+      onGesture(data.data);
+      break;
+  }
+};

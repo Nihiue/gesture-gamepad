@@ -12,6 +12,7 @@
       color:#efefef;
       line-height: 1.8;
     }
+
     .output_canvas {
       display: block;
       max-width: 400px;
@@ -19,28 +20,41 @@
       height: auto;
       margin: auto;
     }
+
     .input_video {
       display: none;
     }
+
     .game {
-      margin: 0 auto;
+      width: 400px;
+      flex-grow: 0;
+      flex-shrink: 0;
     }
+
     .container {
-      padding: 12px;
+      width: 100%;
+      min-height: 98vh;
       display: flex;
       justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
     }
+
     .preview-container {
-      padding-top: 20vh;
-      width: 33%;
+      padding: 24px 0;
+      width: 400px;
       flex-grow: 0;
+      flex-shrink: 0;
     }
+
     .help {
-      font-size: 18px;
-      padding-top: 20vh;
+      padding: 24px 0;
+      width: 400px;
       flex-grow: 0;
-      width: 33%;
+      flex-shrink: 0;
+      font-size: 18px;
     }
+    
     td {
       padding-right: 24px;
     }
@@ -54,7 +68,7 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="container" style="display:none">
     <div class="preview-container">
       <video style="display: none" class="input_video"></video>
       <canvas class="output_canvas" width="1280px" height="720px"></canvas>
@@ -85,16 +99,6 @@
       </table>
     </div>
   </div>
-
-
-  <script src="./svm.js"></script>
-  <script>
-    $('.game').blockrain({
-      theme: 'gameboy',
-      speed: 8,
-      playText: 'Like a ninja',
-    });
-  </script>
   <script src="./app.js" type="module"></script>
 </body>
 </html>
