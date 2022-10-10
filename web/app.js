@@ -90,22 +90,39 @@ function onResults(results) {
   canvasCtx.restore();
 }
 
-function initApp() {
-  
-  const w = window.innerWidth;
+async function detectCamSettings() {
+  const stream  = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: 'user' }
+  });
+  const tracks = stream.getVideoTracks();
+  const settings = tracks[0].getSettings();
+  tracks.forEach(t => t.stop());
+  return settings;
+}
 
-  if (w < 600) {
+async function initApp() {
+  const { aspectRatio } = await detectCamSettings();
+
+  const vHeight = (aspectRatio > 1) ? 720 : 1280;
+  const vWidth = Math.round(vHeight * aspectRatio);
+
+  const outputEl = document.querySelector('.output_canvas');
+  outputEl.width = vWidth;
+  outputEl.height = vHeight;
+
+  const winWidth = window.innerWidth;
+  if (winWidth < 600) {
     const gameEl = document.querySelector('.game');
-    gameEl.style.width = w + 'px';
-    gameEl.style.height = Math.ceil(w * 16 / 9) + 'px';
+    gameEl.style.width = winWidth + 'px';
+    gameEl.style.height = Math.ceil(winWidth * 16 / 9) + 'px';
   }
-  
+
   document.querySelector('.container').style.display = 'flex';
 
   $('.game').blockrain({
     theme: 'gameboy',
     speed: 8,
-    playText: 'Like a ninja',
+    playText: 'Be a ninja',
   });
 
   const hands = new Hands({locateFile: (file) => {
@@ -127,8 +144,8 @@ function initApp() {
         image: videoElement
       });
     },
-    width: 1280,
-    height: 720
+    width: vWidth,
+    height: vHeight,
   });
   
   camera.start();
