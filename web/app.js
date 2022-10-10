@@ -31,7 +31,7 @@ function dispatchKey(keyCode , delay = 50) {
 let lastCommandTime = 0;
 let gameStart = 0;
 
-function virtulKeyboard(name) {
+function virtualKeyboard(name) {
   /**
    case 65: moveLeft(true); break;
    case 68: moveRight(true); break;
@@ -65,7 +65,7 @@ function onGesture(name) {
   if (name === 'idle') {
     return;
   }
-  virtulKeyboard(name);
+  virtualKeyboard(name);
 }
 
 function onResults(results) {
