@@ -1,5 +1,3 @@
-(function() {
-
     var SVC = function(nClasses, nRows, vectors, coefficients, intercepts, weights, kernel, gamma, coef0, degree) {
 
     this.nClasses = nClasses;
@@ -180,7 +178,7 @@
         ];
     }
 
-    window.gesture_predict = function svm_predict(input) {
+    function svm_predict(input) {
         if (!Array.isArray(input) || input.length !== 63) {
             return 'invalid_input';
         }
@@ -188,4 +186,18 @@
         const labels = ['all', 'idle', 'index', 'index_and_middle', 'thumb'];
         return labels[svmInstance.predict(vec_to_feature(input))] || '';
     }
-})();
+
+    onmessage = (e) => {
+        const data = e.data;
+        if (data.type === 'predict') {
+            postMessage({
+                type: 'result',
+                data: svm_predict(data.data)
+            });
+        }
+    }
+
+    postMessage({
+        type: 'ready',
+        data: ''
+    });

@@ -1,3 +1,5 @@
+const svmWorker = new Worker('./svm_worker.js');
+
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
@@ -32,7 +34,7 @@ let lastGestureTime = 0;
 let lastGesture = '';
 let gameStart = 0;
 
-function virtulKeyboard(gesture) {
+function virtualKeyboard(gesture) {
   /**
    case 65: moveLeft(true); break;
    case 68: moveRight(true); break;
@@ -71,7 +73,7 @@ function onGesture(name) {
   if (name === 'idle') {
     return;
   }
-  virtulKeyboard(name);
+  virtualKeyboard(name);
 }
 
 function onResults(results) {
@@ -86,35 +88,85 @@ function onResults(results) {
                      {color: '#00FF00', lineWidth: 5});
       drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
 
-      const gesture = gesture_predict(landmarksToVec(landmarks));
-      onGesture(gesture);
+      svmWorker.postMessage({
+        type: 'predict',
+        data: landmarksToVec(landmarks)
+      });
     }
   }
   canvasCtx.restore();
 }
 
-const hands = new Hands({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
-}});
+async function detectCamSettings() {
+  const stream  = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: 'user' }
+  });
+  const tracks = stream.getVideoTracks();
+  const settings = tracks[0].getSettings();
+  tracks.forEach(t => t.stop());
+  return settings;
+}
 
-hands.setOptions({
-  maxNumHands: 1,
-  modelComplexity: 1,
-  minDetectionConfidence: 0.5,
-  minTrackingConfidence: 0.5
-});
+async function initApp() {
+  const { aspectRatio } = await detectCamSettings();
 
-hands.onResults(onResults);
+  const vHeight = (aspectRatio > 1) ? 720 : 1280;
+  const vWidth = Math.round(vHeight * aspectRatio);
 
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    await hands.send({
-      image: videoElement
-    });
-  },
-  width: 1280,
-  height: 720
-});
+  const outputEl = document.querySelector('.output_canvas');
+  outputEl.width = vWidth;
+  outputEl.height = vHeight;
 
-camera.start();
+  const winWidth = window.innerWidth;
+  if (winWidth < 600) {
+    const gameEl = document.querySelector('.game');
+    gameEl.style.width = winWidth + 'px';
+    gameEl.style.height = Math.ceil(winWidth * 16 / 9) + 'px';
+  }
 
+  document.querySelector('.container').style.display = 'flex';
+
+  $('.game').blockrain({
+    theme: 'gameboy',
+    speed: 8,
+    playText: 'Be a ninja',
+  });
+
+  const hands = new Hands({locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+  }});
+
+  hands.setOptions({
+    maxNumHands: 1,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
+  });
+
+  hands.onResults(onResults);
+
+  const camera = new Camera(videoElement, {
+    onFrame: async () => {
+      await hands.send({
+        image: videoElement
+      });
+    },
+    width: vWidth,
+    height: vHeight,
+  });
+
+  camera.start();
+}
+
+
+svmWorker.onmessage = (e) => {
+  const data = e.data;
+  switch (data.type) {
+    case 'ready':
+      initApp();
+      break;
+    case 'result':
+      onGesture(data.data);
+      break;
+  }
+};
