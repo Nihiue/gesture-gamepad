@@ -46,35 +46,37 @@ def read_label_data(label):
 
   return df
 
-labels = ['all', 'idle', 'index_and_middle', 'index', 'thumb']
+def train_model(labels):
+  df = pd.concat(map(read_label_data, labels))
 
-df = pd.concat(map(read_label_data, labels))
+  print(df)
 
-print(df)
+  X = df.iloc[:, :-1]
+  print("Features shape =", X.shape)
 
-X = df.iloc[:, :-1]
-print("Features shape =", X.shape)
+  Y = df.iloc[:, -1]
+  print("Labels shape =", Y.shape)
 
-Y = df.iloc[:, -1]
-print("Labels shape =", Y.shape)
+  x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
+  svm = SVC(C=10, gamma=0.1, kernel='rbf')
+  svm.fit(x_train, y_train)
 
-x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
-svm = SVC(C=10, gamma=0.1, kernel='rbf')
-svm.fit(x_train, y_train)
-
-y_pred = svm.predict(x_test)
-print('y_pred', y_pred)
+  y_pred = svm.predict(x_test)
+  print('y_pred', y_pred)
 
 
-cf_matrix = confusion_matrix(y_test, y_pred)
-f1 = f1_score(y_test, y_pred, average='micro')
-recall = recall_score(y_test, y_pred, average='micro')
-precision = precision_score(y_test, y_pred, average='micro')
+  cf_matrix = confusion_matrix(y_test, y_pred)
+  f1 = f1_score(y_test, y_pred, average='micro')
+  recall = recall_score(y_test, y_pred, average='micro')
+  precision = precision_score(y_test, y_pred, average='micro')
 
-print('f1, recall, precision', f1, recall, precision)
+  print('f1, recall, precision', f1, recall, precision)
 
-import pickle
+  import pickle
 
-# save model
-with open(basedir + '/model/model.pkl','wb') as f:
-    pickle.dump(svm,f)
+  # save model
+  with open(basedir + '/model/model.pkl','wb') as f:
+      pickle.dump(svm,f)
+
+if __name__ == '__main__':
+  train_model(['all', 'idle', 'index_and_middle', 'index', 'thumb'])

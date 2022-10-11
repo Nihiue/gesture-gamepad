@@ -3,6 +3,8 @@ import os
 import numpy
 
 from cv_impl import detector
+from cv_impl import train
+
 from virtual_keyboard import keyboard
 
 model = open(os.path.dirname(__file__) + '/cv_impl/model/model.pkl', 'rb')
@@ -25,8 +27,8 @@ def send_key_stroke(gesture):
     return gesture
 
 def predict(vec):
-  arr = numpy.array(vec)
-  y_pred = svm.predict(arr.reshape(-1,63))
+  arr = numpy.array(train.vec_to_feature(vec))
+  y_pred = svm.predict(arr.reshape(-1,12))
   gesture = str(y_pred[0])
   return send_key_stroke(gesture)
 
