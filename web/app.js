@@ -28,10 +28,11 @@ function dispatchKey(keyCode , delay = 50) {
 }
 
 
-let lastCommandTime = 0;
+let lastGestureTime = 0;
+let lastGesture = '';
 let gameStart = 0;
 
-function virtulKeyboard(name) {
+function virtulKeyboard(gesture) {
   /**
    case 65: moveLeft(true); break;
    case 68: moveRight(true); break;
@@ -39,25 +40,30 @@ function virtulKeyboard(name) {
    case 87: game._board.cur.rotate('right'); break;
    */
    const now = Date.now();
-   if (lastCommandTime > now - 800) {
+
+   if (lastGesture === gesture && lastGestureTime > now - 500) {
+     // 同样的手势最多每500ms触发一次
      return;
    }
-   lastCommandTime = now;
 
-   if (name === 'index_and_middle' && gameStart < now - 3000) {
+   lastGestureTime = now;
+   lastGesture = gesture;
+
+   if (gesture === 'all' && gameStart < now - 5000) {
      gameStart = now;
      $('.game').blockrain('restart');
    }
 
-   if (name === 'thumb') {
+   if (gesture === 'thumb') {
      dispatchKey(65);
    }
-   if (name === 'index') {
+   if (gesture === 'index') {
      dispatchKey(68);
    }
-   if (name === 'all') {
+   if (gesture === 'index_and_middle') {
      dispatchKey(87);
    }
+
 }
 
 function onGesture(name) {
