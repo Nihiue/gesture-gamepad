@@ -7,9 +7,40 @@ import seaborn as sns
 import os
 
 basedir = os.path.dirname(__file__)
+
+def calc_distance(vec, p1, p2):
+  return ((vec[p1 * 3] - vec[p2 * 3])**2 + (vec[p1 * 3 + 1] - vec[p2 * 3 + 1])**2 + (vec[p1 * 3 + 2] - vec[p2 * 3 + 2])**2) ** 0.5;
+
+def vec_to_feature(vec):
+  base = calc_distance(vec, 0, 5)
+  return [
+    calc_distance(vec, 1, 3) / base,
+    calc_distance(vec, 1, 4) / base,
+    calc_distance(vec, 3, 5) / base,
+    calc_distance(vec, 4, 5) / base,
+
+    calc_distance(vec, 5, 6) / base,
+    calc_distance(vec, 5, 8) / base,
+
+    calc_distance(vec, 9, 10) / base,
+    calc_distance(vec, 9, 12) / base,
+
+    calc_distance(vec, 13, 14) / base,
+    calc_distance(vec, 13, 16) / base,
+
+    calc_distance(vec, 17, 18) / base,
+    calc_distance(vec, 17, 20) / base,
+  ];
+
 def read_label_data(label):
   filename = basedir + '/data/' + label + '.csv'
-  df = pd.read_csv(filename)
+  raw = pd.read_csv(filename)
+
+  feats = []
+  for i in range(raw.shape[0]):
+    feats.append(vec_to_feature(raw.iloc[i]))
+
+  df = pd.DataFrame(feats)
   df.columns = [i for i in range(df.shape[1])]
   df['label'] = label
 
