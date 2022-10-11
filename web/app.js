@@ -32,40 +32,38 @@ function dispatchKey(keyCode , delay = 50) {
 
 let lastGestureTime = 0;
 let lastGesture = '';
-let gameStart = 0;
 
 function virtualKeyboard(gesture) {
-  /**
-   case 65: moveLeft(true); break;
-   case 68: moveRight(true); break;
-   case 83: drop(true); break;
-   case 87: game._board.cur.rotate('right'); break;
-   */
    const now = Date.now();
-
-   if (lastGesture === gesture && lastGestureTime > now - 500) {
-     // 同样的手势最多每500ms触发一次
+   if (lastGesture === gesture && lastGestureTime > now - 300) {
+     // 同样的手势最多每300ms触发一次
      return;
    }
 
    lastGestureTime = now;
    lastGesture = gesture;
 
-   if (gesture === 'all' && gameStart < now - 5000) {
-     gameStart = now;
-     $('.game').blockrain('restart');
-   }
+  /**
+   case 65: moveLeft(true); break;
+   case 68: moveRight(true); break;
+   case 83: drop(true); break;
+   case 87: game._board.cur.rotate('right'); break;
+  */
 
-   if (gesture === 'thumb') {
-     dispatchKey(65);
+   switch (gesture) {
+    case 'all':
+      dispatchKey(83);
+      break;
+    case 'thumb':
+      dispatchKey(65);
+      break;
+    case 'index':
+      dispatchKey(68);
+      break;
+    case 'index_and_middle':
+      dispatchKey(87);
+      break;
    }
-   if (gesture === 'index') {
-     dispatchKey(68);
-   }
-   if (gesture === 'index_and_middle') {
-     dispatchKey(87);
-   }
-
 }
 
 function onGesture(name) {
