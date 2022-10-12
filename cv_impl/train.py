@@ -18,17 +18,22 @@ def vec_to_feature(vec):
     calc_distance(vec, 1, 4) / base,
     calc_distance(vec, 3, 5) / base,
     calc_distance(vec, 4, 5) / base,
+    calc_distance(vec, 4, 6) / base,
 
     calc_distance(vec, 5, 6) / base,
+    calc_distance(vec, 5, 7) / base,
     calc_distance(vec, 5, 8) / base,
 
     calc_distance(vec, 9, 10) / base,
+    calc_distance(vec, 9, 11) / base,
     calc_distance(vec, 9, 12) / base,
 
     calc_distance(vec, 13, 14) / base,
+    calc_distance(vec, 13, 15) / base,
     calc_distance(vec, 13, 16) / base,
 
     calc_distance(vec, 17, 18) / base,
+    calc_distance(vec, 17, 19) / base,
     calc_distance(vec, 17, 20) / base,
   ];
 

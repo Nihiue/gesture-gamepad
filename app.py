@@ -28,7 +28,7 @@ def send_key_stroke(gesture):
 
 def predict(vec):
   arr = numpy.array(train.vec_to_feature(vec))
-  y_pred = svm.predict(arr.reshape(-1,12))
+  y_pred = svm.predict(arr.reshape(-1, arr.shape[0]))
   gesture = str(y_pred[0])
   return send_key_stroke(gesture)
 
