@@ -28,7 +28,8 @@
     }
 
     .input_video {
-      display: none;
+      position: absolute;
+      pointer-events: none;
     }
 
     .game {
@@ -77,18 +78,22 @@
       }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+
+  <!-- <script src=/@mediapipe/control_utils.js"></script>
+  <script src="/@mediapipe/drawing_utils.js"></script>
+  <script src="/@mediapipe/hands.js"></script> -->
+
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/blockrain@0.2.0/dist/blockrain.jquery.min.js"></script>
 </head>
 
 <body>
   <div class="container" style="display:none">
     <div class="preview-container">
-      <video style="display: none" class="input_video"></video>
+      <video style="display: none;" class="input_video"></video>
       <canvas class="output_canvas"></canvas>
       <p style="text-align: center;" id="gesture-name"></p>
     </div>

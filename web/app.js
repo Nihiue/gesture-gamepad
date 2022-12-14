@@ -95,25 +95,41 @@ function onResults(results) {
   canvasCtx.restore();
 }
 
-async function detectCamSettings() {
+async function requestCam() {
   const stream  = await navigator.mediaDevices.getUserMedia({
-    video: { facingMode: 'user' }
+    video: {
+      facingMode: 'user',
+      width: { min: 720, ideal: 1280, max: 1280 },
+      height: { min: 720, ideal: 720, max: 1280 },
+      frameRate: { ideal: 30 }
+    },
+    audio: false
   });
   const tracks = stream.getVideoTracks();
   const settings = tracks[0].getSettings();
-  tracks.forEach(t => t.stop());
-  return settings;
+  return {
+    settings,
+    stream
+  };
 }
 
 async function initApp() {
-  const { aspectRatio } = await detectCamSettings();
+  let camRes;
+  try {
+    camRes = await requestCam();
+  } catch (e) {
+    return alert('cannot open camera');
+  }
 
-  const vHeight = (aspectRatio > 1) ? 720 : 1280;
-  const vWidth = Math.round(vHeight * aspectRatio);
+  const { settings,  stream } = camRes;
+  console.log('initApp', settings);
 
-  const outputEl = document.querySelector('.output_canvas');
-  outputEl.width = vWidth;
-  outputEl.height = vHeight;
+  videoElement.width = settings.width;
+  videoElement.height = settings.height;
+
+  canvasElement.width = settings.width;
+  canvasElement.height = settings.height;
+
 
   const winWidth = window.innerWidth;
   if (winWidth < 600) {
@@ -122,16 +138,10 @@ async function initApp() {
     gameEl.style.height = Math.ceil(winWidth * 16 / 9) + 'px';
   }
 
-  document.querySelector('.container').style.display = 'flex';
-
-  $('.game').blockrain({
-    theme: 'gameboy',
-    speed: 8,
-    playText: 'Be a ninja',
-  });
 
   const hands = new Hands({locateFile: (file) => {
     return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+    // return `/assets/@mediapipe/${file}`;
   }});
 
   hands.setOptions({
@@ -143,17 +153,32 @@ async function initApp() {
 
   hands.onResults(onResults);
 
-  const camera = new Camera(videoElement, {
-    onFrame: async () => {
+
+  let currentPlayTime = 0;
+
+  async function checkVideoFrame() {
+    if (!videoElement.paused && videoElement.currentTime !== currentPlayTime) {
+      currentPlayTime = videoElement.currentTime;
       await hands.send({
         image: videoElement
       });
-    },
-    width: vWidth,
-    height: vHeight,
-  });
+    }
+    requestAnimationFrame(checkVideoFrame);
+  }
 
-  camera.start();
+  videoElement.srcObject = stream;
+  videoElement.onloadedmetadata = function () {
+    videoElement.play();
+    requestAnimationFrame(checkVideoFrame);
+  };
+
+
+  document.querySelector('.container').style.display = 'flex';
+  $('.game').blockrain({
+    theme: 'gameboy',
+    speed: 8,
+    playText: 'Be a ninja',
+  });
 }
 
 
