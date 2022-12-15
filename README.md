@@ -1,12 +1,12 @@
 # gesture-gamepad
 
-Gaming Like a Ninjia!
+Gaming Like a Ninja!
 
 Use gesture to control games
 
 [Video](https://www.bilibili.com/video/BV1rD4y1k7xK)
 
-[Online Demo](https://www.nihi.me/ninjia/)
+[Online Demo](https://www.nihi.me/ninja/)
 
 [ML Model](https://www.heywhale.com/mw/project/6342658cdfae024967917537)
 

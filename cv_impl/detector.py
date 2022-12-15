@@ -65,7 +65,7 @@ def start(mode = 'Default', predict = None):
           print('Capture: ' + str(len(ret_data)))
           ret_data.append(vec)
 
-      cv2.imshow('Gaming Like a Ninjia: ' + mode, image)
+      cv2.imshow('Gaming Like a Ninja: ' + mode, image)
 
   cap.release()
   return ret_data;
